@@ -13,7 +13,8 @@ from cntk.train import Trainer
 import csv
 import time
 from matplotlib import pyplot as plt
-# %matplotlib inline 
+# from cntk.device import try_set_default_device, gpu
+# try_set_default_device(gpu(0))
 
 class RepMem(object):
     def __init__(self, size, sample_shape, history_length=4):
@@ -230,7 +231,7 @@ class DQAgent(object):
         agent_step = self._num_actions_taken
 
         if agent_step >= self._train_after:
-            if (agent_step % self._target_train_interval) == 0:
+            if (agent_step % self._train_interval) == 0:
                 pre_states, actions, post_states, rewards, terminals = self._memory.minibatch(self._minibatch_size)
 
                 self._trainer.train_minibatch(
@@ -283,7 +284,7 @@ def get_current_state():
     return input_state
     
 def interpret_action(action):           #concering output actions
-    scaling_factor = 0.5
+    scaling_factor = 0.1
  
     if action == 0:
         client.moveByRotorSpeed(rp[0], rp[1], rp[2], rp[3], 0.001)
